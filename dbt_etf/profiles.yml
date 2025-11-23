@@ -1,0 +1,8 @@
+dbt_etf:
+  outputs:
+    dev:
+      type: duckdb
+      path: '..\db\etfRAG.duck'
+      threads: 1
+    
+  target: dev

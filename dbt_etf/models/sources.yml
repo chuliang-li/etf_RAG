@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: main # 这个名字和 {{ source(...) }} 宏的第一个参数相对应
+    database: etfRAG # 这个名字和 profiles.yml 中定义的 database name 相对应
+    schema: main # DuckDB 默认的 schema
+    tables:
+      - name: etf_daily # 这个名字和 {{ source(...) }} 宏的第二个参数相对应
+      - name: etf_weekly
