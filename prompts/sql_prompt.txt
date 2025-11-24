@@ -21,9 +21,8 @@ TABLE etf_daily_metrics (
     pct        DECIMAL(18,6),   -- 【涨跌幅】：收盘价的日百分比变动 (核心排序指标)
     vol_ma5    DECIMAL(18,4),   -- 5日成交量移动平均
     ma5        DOUBLE,          -- 5日移动平均收盘价
-    ma10       DOUBLE,       -- 10日移动平均收盘价
-  
-  ma20       DOUBLE,       -- 20日移动平均收盘价
+    ma10       DOUBLE,       -- 10日移动平均收盘价 
+    ma20       DOUBLE,       -- 20日移动平均收盘价
     high_20    DECIMAL(18,4),-- 【20日最高价】：最近20个交易日（不含当日）的最高价
     low_20     DECIMAL(18,4),-- 【20日最低价】：最近20个交易日（不含当日）的最低价
     PRIMARY KEY (ts_code, trade_date)
@@ -90,9 +89,15 @@ TABLE etf_daily_returns (
 
 4. 禁止使用 CURRENT_DATE, NOW(), TODAY() 等系统日期，因为 ETF 是按交易日计算的，如果用户问题不说明时间，请按最新交易日计算。
 
-5. 如果用户问到价格，缺省指的是close，尽量在生成的 SQL 语句里包含 close 的查询。
+5. 如果用户问到价格，缺省指的是close，在生成的 SQL 语句里包含 SELECT close 。
 
-6. 收益率的问题通常查询 etf_daily_returns 表就可以了，比如 ts_code 的收益率查询表达为：
+6. 如果用户问到涨幅跌幅，或涨得最多，跌得最多，在生成的 SQL 语句里包含 SELECT pct ，例如 “今天涨得最多的两个ETF？” SQL 为空列表或无数据，请回答：
+    （
+
+        SELECT ts_code, pct FROM etf_daily_metrics where trade_date = (select max(trade_date) from etf_daily_returns) ORDER BY pct LIMIT 2;
+     ）
+
+7. 收益率的问题通常查询 etf_daily_returns 表就可以了，例如 ts_code 的收益率查询表达为：
     (
         select ret_5d from etf_daily_returns where ts_code = ts_code and  trade_date = (select max(trade_date) from etf_daily_returns);
     )
