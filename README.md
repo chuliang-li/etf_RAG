@@ -16,7 +16,7 @@
 - 大模型使用的是本地的**Ollama**的 `qwen3:4b` 模型，请自行下载搭建
 - 使用下面命令运行界面交互程序 
   ```python
-    python.exe .\frontend\streamlit_app.py
+    streamlit.cmd run .\frontend\streamlit_app.py
       
 ## 未来考虑
 - 增加可以使用云上llm的选项（比如阿里云的dashscope平台）
